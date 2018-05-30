@@ -1,6 +1,8 @@
 package top.mikoto.sangnam.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,14 +12,20 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import top.mikoto.sangnam.Activities.AddAlarmActivity;
 import top.mikoto.sangnam.Models.AlarmListViewItem;
+import top.mikoto.sangnam.Models.AlarmModel;
 import top.mikoto.sangnam.R;
 
 public class AlarmListViewAdapter extends BaseAdapter {
-    private ArrayList<AlarmListViewItem> itemArrayList = new ArrayList<>();
+    private ArrayList<AlarmModel> itemArrayList = new ArrayList<>();
+    private Context context;
 
-    public AlarmListViewAdapter() {
+    public AlarmListViewAdapter(ArrayList<AlarmModel> alarms, Context context) {
+        itemArrayList = alarms;
+        this.context = context;
     }
 
 
@@ -51,20 +59,28 @@ public class AlarmListViewAdapter extends BaseAdapter {
         TextView txtDay = view.findViewById(R.id.txtDay);
         Switch sw = view.findViewById(R.id.sw);
 
-        AlarmListViewItem item = itemArrayList.get(i);
+        final AlarmModel item = itemArrayList.get(i);
 
         txtTime.setText(item.getTime());
-        txtDay.setText(item.getDayOfTheWeek());
-        sw.setChecked(item.isRun());
+        txtDay.setText(item.getDays());
+        sw.setChecked((item.getRun()!=0)); //if run was 0, set false.
 
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), AddAlarmActivity.class);
+                intent.putExtra("_id", item.get_id());
+                context.startActivity(intent);
+            }
+        });
         return view;
     }
 
     public void addItem(String time, String day) {
-        AlarmListViewItem item = new AlarmListViewItem();
+        AlarmModel item = new AlarmModel();
         item.setTime(time);
-        item.setDayOfTheWeek(day);
-        item.setRun(true);
+        item.setDays(day);
+        item.setRun(1);
 
         itemArrayList.add(item);
     }
