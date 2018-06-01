@@ -1,20 +1,19 @@
 package top.mikoto.sangnam.Utils.DB;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import java.util.ArrayList;
-import java.util.List;
+
 
 import top.mikoto.sangnam.Models.AlarmModel;
 
 public class DBHelper extends SQLiteOpenHelper {
 
-    private Context context;
-
-
+    private final Context context;
 
     public DBHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
@@ -23,14 +22,13 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        StringBuffer sb = new StringBuffer();
-        sb.append(" CREATE TABLE ALARM ( ");
-        sb.append(" _ID INTEGER PRIMARY KEY AUTOINCREMENT, ");
-        sb.append(" TIME TEXT, ");
-        sb.append(" DAYS TEXT, ");
-        sb.append(" RUN INTEGER ) ");
+        String sb = " CREATE TABLE ALARM ( " +
+                " _ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                " TIME TEXT, " +
+                " DAYS TEXT, " +
+                " RUN INTEGER ) ";
 
-        db.execSQL(sb.toString());
+        db.execSQL(sb);
     }
 
     @Override
@@ -38,32 +36,28 @@ public class DBHelper extends SQLiteOpenHelper {
 
     }
 
-    public void addAlarm(AlarmModel alarm)
+    public int addAlarm(AlarmModel alarm)
     {
         SQLiteDatabase db = getWritableDatabase();
 
-        StringBuffer sb = new StringBuffer();
-        sb.append(" INSERT INTO ALARM ( ");
-        sb.append(" TIME, DAYS, RUN ) ");
-        sb.append(" VALUES ( ?, ?, ? ) ");
+        ContentValues values = new ContentValues();
+        values.put("TIME", alarm.getTime());
+        values.put("DAYS", alarm.getDays());
+        values.put("RUN",alarm.getRun());
 
-        db.execSQL(sb.toString(),new Object[] {
-                alarm.getTime(),
-                alarm.getDays(),
-                alarm.getRun()
-        });
+        long result = db.insert("ALARM",null,values);
+
+        return (int)result;
     }
 
-    public List getAllAlrams()
+    public ArrayList<AlarmModel> getAllAlrams()
     {
-        StringBuffer sb = new StringBuffer();
-        sb.append(" SELECT _ID, TIME, DAYS, RUN FROM ALARM ");
 
         SQLiteDatabase db = getReadableDatabase();
 
-        Cursor cursor = db.rawQuery(sb.toString(),null);
-        List alarms = new ArrayList();
-        AlarmModel alarm = null;
+        Cursor cursor = db.rawQuery(" SELECT _ID, TIME, DAYS, RUN FROM ALARM ",null);
+        ArrayList<AlarmModel> alarms = new ArrayList<>();
+        AlarmModel alarm;
 
         while(cursor.moveToNext())
         {
@@ -74,22 +68,21 @@ public class DBHelper extends SQLiteOpenHelper {
             alarm.setRun(cursor.getInt(3));
             alarms.add(alarm);
         }
-
+        cursor.close();
         return alarms;
     }
 
     public AlarmModel getAlarmById(int _id)
     {
-        StringBuffer sb = new StringBuffer();
-        sb.append(" SELECT TIME, DAYS, RUN FROM ALARM WHERE _ID = ? ");
 
         SQLiteDatabase db = getReadableDatabase();
-        Cursor cursor = db.rawQuery(sb.toString(),new String[]{_id+""});
+        Cursor cursor = db.rawQuery(" SELECT TIME, DAYS, RUN FROM ALARM WHERE _ID = ? ",new String[]{_id+""});
         AlarmModel alarm = null;
         if(cursor.moveToNext())
         {
             alarm = new AlarmModel(_id, cursor.getString(0),cursor.getString(1),cursor.getInt(2));
         }
+        cursor.close();
         return alarm;
     }
 }

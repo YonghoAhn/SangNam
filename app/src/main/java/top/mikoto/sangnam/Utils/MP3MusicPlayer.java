@@ -2,28 +2,50 @@ package top.mikoto.sangnam.Utils;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.Log;
-import android.widget.Toast;
+import android.widget.LinearLayout;
 
-import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
+import top.mikoto.sangnam.Models.SongModel;
+import top.mikoto.sangnam.R;
+
 public class MP3MusicPlayer {
-    static MP3MusicPlayer instance = null;
-    Context context;
+    private static MP3MusicPlayer instance = null;
+    private final Context context;
     public static MP3MusicPlayer getInstance(Context applicationContext) {
         if(instance!=null)
             return instance;
         else
-            return (instance = new MP3MusicPlayer(applicationContext));
+            return (instance = new MP3MusicPlayer(applicationContext.getApplicationContext()));
     }
 
-    public MP3MusicPlayer(Context context) {
+    private MP3MusicPlayer(Context context) {
         this.context = context;
+    }
+
+    public Bitmap getAlbumArt(String path)
+    {
+        android.media.MediaMetadataRetriever mmr = new MediaMetadataRetriever();
+        mmr.setDataSource(path);
+
+        byte [] data = mmr.getEmbeddedPicture();
+        // convert the byte array to a bitmap
+        if(data != null)
+        {
+            Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+            return bitmap;
+        }
+        else
+        {
+            return BitmapFactory.decodeResource(context.getResources(),R.drawable.Album);
+        }
     }
 
     public List<String> scanDeviceForMp3Files(){
@@ -46,14 +68,15 @@ public class MP3MusicPlayer {
                 cursor.moveToFirst();
 
                 while( !cursor.isAfterLast() ){
-                    String title = cursor.getString(0);
-                    String artist = cursor.getString(1);
-                    String path = cursor.getString(2);
-                    String displayName  = cursor.getString(3);
-                    String songDuration = cursor.getString(4);
+                    SongModel song = new SongModel();
+                    song.setTitle(cursor.getString(0));
+                    song.setArtist(cursor.getString(1));
+                    song.setPath(cursor.getString(2));
+                    song.setDisplayName(cursor.getString(3));
+                    song.setDuration(cursor.getString(4));
                     cursor.moveToNext();
-                    if(path != null && path.endsWith(".mp3")) {
-                        mp3Files.add(path);
+                    if(song.getPath()!=null && song.getPath().endsWith(".mp3")) {
+                        mp3Files.add(song.getPath());
                     }
                 }
 
@@ -74,33 +97,5 @@ public class MP3MusicPlayer {
         return mp3Files;
     }
 
-
-    public ArrayList<HashMap<String,String>> getPlayList(String rootPath) {
-        ArrayList<HashMap<String,String>> fileList = new ArrayList<>();
-        try {
-            File rootFolder = new File(rootPath);
-            File[] files = rootFolder.listFiles(); //here you will get NPE if directory doesn't contains any file, handle it like this.
-            for (File file : files) {
-                if (file.isDirectory()) {
-                    if (getPlayList(file.getAbsolutePath()) != null) {
-                        fileList.addAll(getPlayList(file.getAbsolutePath()));
-                    } else {
-                        break;
-                    }
-                } else if (file.getName().endsWith(".mp3")) {
-                    HashMap<String, String> song = new HashMap<>();
-                    song.put("file_path", file.getAbsolutePath());
-                    song.put("file_name", file.getName());
-
-                    Toast.makeText(context, file.getName(), Toast.LENGTH_SHORT).show();
-                    fileList.add(song);
-                }
-            }
-            return fileList;
-        } catch (Exception e) {
-            Log.d("MisakaMOE",e.getMessage());
-            return null;
-        }
-    }
 
 }

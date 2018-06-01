@@ -1,10 +1,8 @@
 package top.mikoto.sangnam.Activities;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -13,7 +11,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
 
+import top.mikoto.sangnam.Adapters.AlarmListViewAdapter;
 import top.mikoto.sangnam.R;
+import top.mikoto.sangnam.Utils.DB.DBHelper;
 import top.mikoto.sangnam.Utils.MP3MusicPlayer;
 
 public class MainActivity extends AppCompatActivity {
@@ -45,12 +45,17 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                MP3MusicPlayer.getInstance(getApplicationContext()).scanDeviceForMp3Files();
-                startActivity(new Intent(getApplicationContext(),AddAlarmActivity.class));
+                startActivityForResult(new Intent(getApplicationContext(),AddAlarmActivity.class),200);
             }
         });
 
+        DBHelper dbHelper = new DBHelper(this,"ALARM",null,1);
 
-        ListView listView;
-        
+
+        ListView listView = findViewById(R.id.listview);
+        AlarmListViewAdapter adapter = new AlarmListViewAdapter(dbHelper.getAllAlrams(),getApplicationContext());
+
+
+        listView.setAdapter(adapter);
     }
 }

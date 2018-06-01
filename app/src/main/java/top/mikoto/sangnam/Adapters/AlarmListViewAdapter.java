@@ -2,30 +2,24 @@ package top.mikoto.sangnam.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import top.mikoto.sangnam.Activities.AddAlarmActivity;
-import top.mikoto.sangnam.Models.AlarmListViewItem;
 import top.mikoto.sangnam.Models.AlarmModel;
 import top.mikoto.sangnam.R;
 
 public class AlarmListViewAdapter extends BaseAdapter {
-    private ArrayList<AlarmModel> itemArrayList = new ArrayList<>();
-    private Context context;
+    private final ArrayList<AlarmModel> itemArrayList;
 
     public AlarmListViewAdapter(ArrayList<AlarmModel> alarms, Context context) {
         itemArrayList = alarms;
-        this.context = context;
     }
 
 
@@ -46,13 +40,12 @@ public class AlarmListViewAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        final int pos = i;
         final Context context = viewGroup.getContext();
 
         if(view == null)
         {
             LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = inflater.inflate(R.layout.alarm_item,viewGroup,false);
+            view = inflater != null ? inflater.inflate(R.layout.alarm_item, viewGroup, false) : null;
         }
 
         TextView txtTime = view.findViewById(R.id.txtTime);

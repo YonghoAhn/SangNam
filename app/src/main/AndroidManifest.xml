@@ -6,9 +6,11 @@
     <uses-permission android:name="android.permission.REORDER_TASKS" />
     <!-- THIS IS DANGEROUS PERMISSION, MUST REQUEST USER GRANT -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:allowBackup="true"
+        android:fullBackupContent="@xml/backup_descriptor"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
@@ -24,7 +26,7 @@
         <activity android:name=".Activities.AddAlarmActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Activities.MainActivity"/>
+                android:value=".Activities.MainActivity" />
         </activity>
 
         <receiver
@@ -36,7 +38,18 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".Activities.RingAlarmActivity" android:theme="@style/FullScreenTheme"></activity>
+        <activity
+            android:name=".Activities.RingAlarmActivity"
+            android:theme="@style/FullScreenTheme" />
+
+        <receiver
+            android:name=".Receivers.AlarmReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="top.mikoto.sangnam.ALARM"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
