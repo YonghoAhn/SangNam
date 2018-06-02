@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.support.v4.content.ContextCompat;
 
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 import top.mikoto.sangnam.Models.AlarmModel;
 import top.mikoto.sangnam.Utils.DB.DBHelper;
@@ -29,8 +30,6 @@ public class AlarmManager {
 
     private void addAlarm(AlarmModel alarmModel)
     {
-        DBHelper dbHelper = new DBHelper(context,"ALARM",null,1);
-        int _id = dbHelper.addAlarm(alarmModel);
 
         android.app.AlarmManager alarmManager = (android.app.AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         Intent mAlarmIntent = new Intent("top.mikoto.sangnam.ALARM");
@@ -40,6 +39,22 @@ public class AlarmManager {
                 mAlarmIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT
         );
+    }
+
+    private void addAlarm(int hour, int minute, int dayOfweek)
+    {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.DAY_OF_WEEK, dayOfweek);
+        calendar.set(Calendar.HOUR_OF_DAY, hour);
+        calendar.set(Calendar.MINUTE, minute);
+
+        if(calendar.getTimeInMillis() < System.currentTimeMillis())
+        {
+            calendar.add(Calendar.DAY_OF_YEAR,new GregorianCalendar().get(Calendar.DAY_OF_WEEK)-1);
+        }
+
+        DBHelper dbHelper = new DBHelper(context,"ALARM",null,1);
+        int _id = dbHelper.addAlarm();
 
 
     }
