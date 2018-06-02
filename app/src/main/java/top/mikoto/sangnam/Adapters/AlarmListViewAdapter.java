@@ -58,13 +58,10 @@ public class AlarmListViewAdapter extends BaseAdapter {
         txtDay.setText(item.getDays());
         sw.setChecked((item.getRun()!=0)); //if run was 0, set false.
 
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), AddAlarmActivity.class);
-                intent.putExtra("_id", item.get_id());
-                context.startActivity(intent);
-            }
+        view.setOnClickListener(v -> {
+            Intent intent = new Intent(v.getContext(), AddAlarmActivity.class);
+            intent.putExtra("_id", item.get_id());
+            context.startActivity(intent);
         });
         return view;
     }

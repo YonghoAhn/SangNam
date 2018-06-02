@@ -44,7 +44,7 @@ public class MP3MusicPlayer {
         }
         else
         {
-            return BitmapFactory.decodeResource(context.getResources(),R.drawable.Album);
+            return BitmapFactory.decodeResource(context.getResources(),R.drawable.album);
         }
     }
 
