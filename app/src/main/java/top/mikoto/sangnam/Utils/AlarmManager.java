@@ -28,21 +28,22 @@ public class AlarmManager {
         this.context = context;
     }
 
-    private void addAlarm(AlarmModel alarmModel)
-    {
 
+   //
+   //
+   //
+   //
+
+    /**
+     * @param hour HOUR_OF_DAY, 24h format
+     * @param minute MINUTE
+     * @param dayOfweek SPECIFIC DAY : ex) Calendar.Monday
+     * @param pendingIntent PENDING INTENT
+     */
+    private void addAlarm(int hour, int minute, int dayOfweek, PendingIntent pendingIntent)
+    {
         android.app.AlarmManager alarmManager = (android.app.AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-        Intent mAlarmIntent = new Intent("top.mikoto.sangnam.ALARM");
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(
-                context,
-                _id,
-                mAlarmIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT
-        );
-    }
 
-    private void addAlarm(int hour, int minute, int dayOfweek)
-    {
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.DAY_OF_WEEK, dayOfweek);
         calendar.set(Calendar.HOUR_OF_DAY, hour);
@@ -53,9 +54,9 @@ public class AlarmManager {
             calendar.add(Calendar.DAY_OF_YEAR,new GregorianCalendar().get(Calendar.DAY_OF_WEEK)-1);
         }
 
-        DBHelper dbHelper = new DBHelper(context,"ALARM",null,1);
-        int _id = dbHelper.addAlarm();
 
+
+        alarmManager.setRepeating(android.app.AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), android.app.AlarmManager.INTERVAL_DAY * 7, pendingIntent);
 
     }
 
@@ -74,18 +75,17 @@ public class AlarmManager {
         Calendar cal = Calendar.getInstance();
         int nWeek = cal.get(Calendar.DAY_OF_WEEK)-1; //match with days array index
         boolean isTodayRing = false;
-        if(days[nWeek]) //we must ring alarm in today?
-        {
-            //Check Time.
-            int curHour = cal.get(Calendar.HOUR_OF_DAY);
-            int curMin = cal.get(Calendar.MINUTE);
 
-            if(((curHour < hour) || ((curHour == hour) && (curMin < miniute)))) //(현재 시간이 설정 시간보다 작음 or 시간은 같은데 분이 작음) -> go next day
-            {
-                isTodayRing = true;
-            }
-        }
+        DBHelper dbHelper = new DBHelper(context,"ALARM",null,1);
+        int _id = dbHelper.addAlarm();
 
+        Intent mAlarmIntent = new Intent("top.mikoto.sangnam.ALARM");
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                context,
+                _id,
+                mAlarmIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT
+        );
 
 
         cal.set(Calendar.HOUR_OF_DAY, hour);
