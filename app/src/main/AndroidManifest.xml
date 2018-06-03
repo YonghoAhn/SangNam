@@ -43,6 +43,7 @@
             android:theme="@style/FullScreenTheme" />
 
         <receiver
+            android:process=":remote"
             android:name=".Receivers.AlarmReceiver"
             android:enabled="true"
             android:exported="true">

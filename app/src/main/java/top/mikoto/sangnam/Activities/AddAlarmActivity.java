@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TimePicker;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import java.util.Calendar;
@@ -51,12 +52,14 @@ public class AddAlarmActivity extends AppCompatActivity {
             case R.id.btnConfirm :
                 //Save alarm from here.
                 AlarmManager alarmManager = AlarmManager.getInstance(getApplicationContext());
-                AlarmModel alarmModel = new AlarmModel();
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
                     alarmManager.addAlarm(picker.getHour(),picker.getMinute(),getDaysOfWeek());
-                }
+                else
+                    alarmManager.addAlarm(picker.getCurrentHour(),picker.getCurrentMinute(),getDaysOfWeek());
                 break;
         }
+        Toast.makeText(getApplicationContext(),"Alarm set",Toast.LENGTH_SHORT).show();
+        finish();
         return super.onOptionsItemSelected(item);
     }
 
@@ -70,7 +73,7 @@ public class AddAlarmActivity extends AppCompatActivity {
         result[4] = parseDay(binding.btnThu.isChecked());
         result[5] = parseDay(binding.btnFri.isChecked());
         result[6] = parseDay(binding.btnSat.isChecked());
-        return  result.toString();
+        return  String.valueOf(result);
     }
 
     private char parseDay(boolean checked)

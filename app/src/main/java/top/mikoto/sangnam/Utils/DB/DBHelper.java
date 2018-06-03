@@ -46,7 +46,7 @@ public class DBHelper extends SQLiteOpenHelper {
         values.put("RUN",alarm.getRun());
 
         long result = db.insert("ALARM",null,values);
-
+        db.close();
         return (int)result;
     }
 
@@ -69,6 +69,7 @@ public class DBHelper extends SQLiteOpenHelper {
             alarms.add(alarm);
         }
         cursor.close();
+        db.close();
         return alarms;
     }
 
@@ -83,6 +84,7 @@ public class DBHelper extends SQLiteOpenHelper {
             alarm = new AlarmModel(_id, cursor.getString(0),cursor.getString(1),cursor.getInt(2));
         }
         cursor.close();
+        db.close();
         return alarm;
     }
 }

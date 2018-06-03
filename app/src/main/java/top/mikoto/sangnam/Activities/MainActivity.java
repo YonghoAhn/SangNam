@@ -31,7 +31,6 @@ public class MainActivity extends AppCompatActivity {
                     Manifest.permission.READ_EXTERNAL_STORAGE)) {
                 //permission already denied. :(
             } else {
-
                 // No explanation needed, we can request the permission.
                 ActivityCompat.requestPermissions(this,
                         new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
@@ -41,21 +40,17 @@ public class MainActivity extends AppCompatActivity {
 
         //FAB
         FloatingActionButton btnAdd = findViewById(R.id.btnAdd);
-        btnAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-               MP3MusicPlayer.getInstance(getApplicationContext()).scanDeviceForMp3Files();
-                startActivityForResult(new Intent(getApplicationContext(),AddAlarmActivity.class),200);
-            }
+        btnAdd.setOnClickListener(v -> {
+           MP3MusicPlayer.getInstance(getApplicationContext()).scanDeviceForMp3Files();
+            startActivityForResult(new Intent(getApplicationContext(),AddAlarmActivity.class),200);
         });
 
         DBHelper dbHelper = new DBHelper(this,"ALARM",null,1);
 
-
         ListView listView = findViewById(R.id.listview);
         AlarmListViewAdapter adapter = new AlarmListViewAdapter(dbHelper.getAllAlrams(),getApplicationContext());
-
-
         listView.setAdapter(adapter);
+
+        dbHelper.close();
     }
 }
