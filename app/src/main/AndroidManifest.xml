@@ -43,14 +43,16 @@
             android:theme="@style/FullScreenTheme" />
 
         <receiver
-            android:process=":remote"
             android:name=".Receivers.AlarmReceiver"
             android:enabled="true"
-            android:exported="true">
+            android:exported="true"
+            android:process=":remote">
             <intent-filter>
-                <action android:name="top.mikoto.sangnam.ALARM"/>
+                <action android:name="top.mikoto.sangnam.ALARM" />
             </intent-filter>
         </receiver>
+
+        <activity android:name=".Activities.WelcomeActivity"></activity>
     </application>
 
 </manifest>

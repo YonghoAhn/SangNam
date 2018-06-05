@@ -50,7 +50,7 @@ public class DBHelper extends SQLiteOpenHelper {
         return (int)result;
     }
 
-    public ArrayList<AlarmModel> getAllAlrams()
+    public ArrayList<AlarmModel> getAllAlarms()
     {
 
         SQLiteDatabase db = getReadableDatabase();
@@ -75,7 +75,6 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public AlarmModel getAlarmById(int _id)
     {
-
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.rawQuery(" SELECT TIME, DAYS, RUN FROM ALARM WHERE _ID = ? ",new String[]{_id+""});
         AlarmModel alarm = null;
@@ -88,5 +87,17 @@ public class DBHelper extends SQLiteOpenHelper {
         return alarm;
     }
 
+    public void updateAlarm(AlarmModel alarm, int _id)
+    {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues cv = new ContentValues();
+
+        cv.put("TIME", alarm.getTime());
+        cv.put("DAYS", alarm.getDays());
+        cv.put("RUN",alarm.getRun());
+
+        db.update("ALARM",cv,"_ID="+_id,null);
+        db.close();
+    }
 
 }

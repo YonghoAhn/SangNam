@@ -38,13 +38,28 @@ public class AlarmManager {
    //
    //
 
+    public void updateAlarm(int _id, int hour, int minute)
+    {
+
+    }
+
+    public void updateAlarm(int _id, String days)
+    {
+
+    }
+
+    public void updateAlarm(int _id, boolean run)
+    {
+
+    }
+
     /**
      * @param hour HOUR_OF_DAY, 24h format
      * @param minute MINUTE
      * @param dayOfWeek SPECIFIC DAY : ex) Calendar.Monday
      * @param pendingIntent PENDING INTENT id
      */
-    private void addAlarm(int hour, int minute, int dayOfWeek, PendingIntent pendingIntent)
+    public void addAlarm(int hour, int minute, int dayOfWeek, PendingIntent pendingIntent)
     {
         android.app.AlarmManager alarmManager = (android.app.AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         Log.d("MisakaMOE",String.valueOf(alarmManager!=null));
@@ -61,6 +76,11 @@ public class AlarmManager {
         }
         alarmManager.setExact(android.app.AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),pendingIntent);
         //alarmManager.setRepeating(android.app.AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), android.app.AlarmManager.INTERVAL_DAY * 7, pendingIntent);
+
+    }
+
+    public void removeAlarm(int _id)
+    {
 
     }
 
@@ -88,12 +108,16 @@ public class AlarmManager {
         Log.d("MisakaMOE",String.valueOf(_id));
 
         Intent mAlarmIntent = new Intent(context, AlarmReceiver.class);
+
+        mAlarmIntent.putExtra("_id", _id);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(
                 context,
                 _id,
                 mAlarmIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT
         );
+
+
 
         for(int i = 0; i< 7; i++) //0 : sunday
         {
@@ -104,6 +128,22 @@ public class AlarmManager {
         }
 
         dbHelper.close();
+    }
+
+    public static String parseTime(String time)
+    {
+        String[] temp = time.split("\\|");
+        //temp[0] = hour, temp[1] = minute
+        String result = "";
+
+        if(temp[0].length() == 1)
+            result += "0"+temp[0];
+        else
+            result += temp[0];
+
+        result += " : " + temp[1];
+
+        return result;
     }
 
 }

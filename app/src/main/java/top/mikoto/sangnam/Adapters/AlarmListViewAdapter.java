@@ -15,6 +15,8 @@ import top.mikoto.sangnam.Activities.AddAlarmActivity;
 import top.mikoto.sangnam.Models.AlarmModel;
 import top.mikoto.sangnam.R;
 
+import static top.mikoto.sangnam.Utils.AlarmManager.parseTime;
+
 public class AlarmListViewAdapter extends BaseAdapter {
     private final ArrayList<AlarmModel> itemArrayList;
 
@@ -54,7 +56,7 @@ public class AlarmListViewAdapter extends BaseAdapter {
 
         final AlarmModel item = itemArrayList.get(i);
 
-        txtTime.setText(item.getTime());
+        txtTime.setText(parseTime(item.getTime()));
         txtDay.setText(item.getDays());
         sw.setChecked((item.getRun()!=0)); //if run was 0, set false.
 
@@ -74,5 +76,7 @@ public class AlarmListViewAdapter extends BaseAdapter {
 
         itemArrayList.add(item);
     }
+
+
 
 }
