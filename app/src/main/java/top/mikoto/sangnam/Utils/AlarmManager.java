@@ -42,9 +42,9 @@ public class AlarmManager {
      * @param hour HOUR_OF_DAY, 24h format
      * @param minute MINUTE
      * @param dayOfWeek SPECIFIC DAY : ex) Calendar.Monday
-     * @param _id PENDING INTENT id
+     * @param pendingIntent PENDING INTENT id
      */
-    private void addAlarm(int hour, int minute, int dayOfWeek, int _id)
+    private void addAlarm(int hour, int minute, int dayOfWeek, PendingIntent pendingIntent)
     {
         android.app.AlarmManager alarmManager = (android.app.AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         Log.d("MisakaMOE",String.valueOf(alarmManager!=null));
@@ -55,20 +55,11 @@ public class AlarmManager {
         calendar.set(Calendar.MINUTE, minute);
         calendar.set(Calendar.SECOND,0);
 
-        Intent mAlarmIntent = new Intent(context, AlarmReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(
-                context,
-                _id,
-                mAlarmIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT
-        );
-
-
         if(calendar.getTimeInMillis() < System.currentTimeMillis())
         {
             calendar.add(Calendar.DAY_OF_YEAR,new GregorianCalendar().get(Calendar.DAY_OF_WEEK)-1);
         }
-        alarmManager.set(android.app.AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),pendingIntent);
+        alarmManager.setExact(android.app.AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),pendingIntent);
         //alarmManager.setRepeating(android.app.AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), android.app.AlarmManager.INTERVAL_DAY * 7, pendingIntent);
 
     }
@@ -92,14 +83,23 @@ public class AlarmManager {
         alarmModel.setRun(1);
 
         DBHelper dbHelper = new DBHelper(context,"ALARM",null,1);
+
         int _id = dbHelper.addAlarm(alarmModel);
         Log.d("MisakaMOE",String.valueOf(_id));
+
+        Intent mAlarmIntent = new Intent(context, AlarmReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                context,
+                _id,
+                mAlarmIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT
+        );
 
         for(int i = 0; i< 7; i++) //0 : sunday
         {
             if(days[i])
             {
-                addAlarm(hour,minute,i+1, _id); //1 = sunday
+                addAlarm(hour,minute,i+1, pendingIntent); //1 = sunday
             }
         }
 
