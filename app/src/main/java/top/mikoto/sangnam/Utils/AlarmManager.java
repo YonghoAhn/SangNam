@@ -3,6 +3,7 @@ package top.mikoto.sangnam.Utils;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
@@ -10,6 +11,7 @@ import android.widget.Toast;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.Random;
 
 import top.mikoto.sangnam.Models.AlarmModel;
 import top.mikoto.sangnam.Receivers.AlarmReceiver;
@@ -62,8 +64,6 @@ public class AlarmManager {
     public void addAlarm(int hour, int minute, int dayOfWeek, PendingIntent pendingIntent)
     {
         android.app.AlarmManager alarmManager = (android.app.AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-        Log.d("MisakaMOE",String.valueOf(alarmManager!=null));
-
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.DAY_OF_WEEK, dayOfWeek);
         calendar.set(Calendar.HOUR_OF_DAY, hour);
@@ -74,8 +74,8 @@ public class AlarmManager {
         {
             calendar.add(Calendar.DAY_OF_YEAR,new GregorianCalendar().get(Calendar.DAY_OF_WEEK)-1);
         }
-        alarmManager.setExact(android.app.AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),pendingIntent);
-        //alarmManager.setRepeating(android.app.AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), android.app.AlarmManager.INTERVAL_DAY * 7, pendingIntent);
+
+        alarmManager.setRepeating(android.app.AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), android.app.AlarmManager.INTERVAL_DAY * 7, pendingIntent);
 
     }
 
@@ -105,27 +105,32 @@ public class AlarmManager {
         DBHelper dbHelper = new DBHelper(context,"ALARM",null,1);
 
         int _id = dbHelper.addAlarm(alarmModel);
-        Log.d("MisakaMOE",String.valueOf(_id));
 
         Intent mAlarmIntent = new Intent(context, AlarmReceiver.class);
-
-        mAlarmIntent.putExtra("_id", _id);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(
-                context,
-                _id,
-                mAlarmIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT
-        );
+        mAlarmIntent.setData(Uri.parse("mikoto://"+_id));
+        mAlarmIntent.setAction("top.mikoto.sangnam.ALARM");
+        //mAlarmIntent.putExtra("_id", _id);
 
 
+         //1 = sunday
 
         for(int i = 0; i< 7; i++) //0 : sunday
         {
             if(days[i])
             {
-                addAlarm(hour,minute,i+1, pendingIntent); //1 = sunday
+                PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                        context,
+                        _id+i,
+                        mAlarmIntent,
+                        PendingIntent.FLAG_UPDATE_CURRENT
+                );
+                addAlarm(hour,minute,i+1, pendingIntent);
             }
         }
+
+        PrefManager prefManager = new PrefManager(context);
+
+        prefManager.setLatestId(_id+7);
 
         dbHelper.close();
     }

@@ -16,6 +16,7 @@ public class BootReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         //
+        /*
         int _id = intent.getIntExtra("_id",-1);
         if(_id != -1)
         {
@@ -37,8 +38,9 @@ public class BootReceiver extends BroadcastReceiver {
 
             Calendar calendar = Calendar.getInstance();
 
-            alarmManager.addAlarm(Integer.parseInt(temp[0]),Integer.parseInt(temp[1]),calendar.get(Calendar.DAY_OF_WEEK),pendingIntent);
+           // alarmManager.addAlarm(Integer.parseInt(temp[0]),Integer.parseInt(temp[1]),calendar.get(Calendar.DAY_OF_WEEK),pendingIntent);
             dbHelper.close();
         }
+        */
     }
 }

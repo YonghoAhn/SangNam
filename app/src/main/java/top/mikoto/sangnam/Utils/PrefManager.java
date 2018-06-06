@@ -15,6 +15,7 @@ public class PrefManager {
     private static final String PREF_NAME = "sangnam";
 
     private static final String IS_FIRST_TIME_LAUNCH = "IsFirstTimeLaunch";
+    private static final String LATEST_ID = "LatestID";
 
     public PrefManager(Context context) {
         this._context = context;
@@ -29,5 +30,14 @@ public class PrefManager {
 
     public boolean isFirstTimeLaunch() {
         return pref.getBoolean(IS_FIRST_TIME_LAUNCH, true);
+    }
+
+    public void setLatestId(int latestId){
+        editor.putInt(LATEST_ID,latestId);
+        editor.commit();
+    }
+
+    public int getLatestID() {
+        return pref.getInt(LATEST_ID,-1);
     }
 }
