@@ -100,4 +100,11 @@ public class DBHelper extends SQLiteOpenHelper {
         db.close();
     }
 
+    public void removeAlarm(int _id)
+    {
+        SQLiteDatabase db =getWritableDatabase();
+        db.delete("ALARM","_ID=?",new String[]{String.valueOf(_id)});
+        db.close();
+    }
+
 }

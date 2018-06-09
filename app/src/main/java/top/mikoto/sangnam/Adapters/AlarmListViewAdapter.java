@@ -2,6 +2,7 @@ package top.mikoto.sangnam.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import top.mikoto.sangnam.Activities.AddAlarmActivity;
 import top.mikoto.sangnam.Models.AlarmModel;
 import top.mikoto.sangnam.R;
 
+import static top.mikoto.sangnam.Utils.AlarmManager.parseDays;
 import static top.mikoto.sangnam.Utils.AlarmManager.parseTime;
 
 public class AlarmListViewAdapter extends BaseAdapter {
@@ -48,6 +50,7 @@ public class AlarmListViewAdapter extends BaseAdapter {
         {
             LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = inflater != null ? inflater.inflate(R.layout.alarm_item, viewGroup, false) : null;
+            view.setLongClickable(true);
         }
 
         TextView txtTime = view.findViewById(R.id.txtTime);
@@ -57,7 +60,7 @@ public class AlarmListViewAdapter extends BaseAdapter {
         final AlarmModel item = itemArrayList.get(i);
 
         txtTime.setText(parseTime(item.getTime()));
-        txtDay.setText(item.getDays());
+        txtDay.setText(Html.fromHtml(parseDays(item.getDays())));
         sw.setChecked((item.getRun()!=0)); //if run was 0, set false.
 
         view.setOnClickListener(v -> {

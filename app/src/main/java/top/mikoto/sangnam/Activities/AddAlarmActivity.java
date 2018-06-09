@@ -1,10 +1,13 @@
 package top.mikoto.sangnam.Activities;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Build;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TimePicker;
@@ -22,13 +25,34 @@ public class AddAlarmActivity extends AppCompatActivity {
 
     TimePicker picker;
     ActivityAddAlarmBinding binding;
+    boolean isUpdateMode = false;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_add_alarm);
 
+        Intent intent = getIntent();
+        int _id = intent.getIntExtra("_id",-1);
         picker = findViewById(R.id.timePicker);
         picker.setIs24HourView(true);
+
+        if(_id != -1)
+        {
+            Log.d("MisakaMOE", String.valueOf(_id));
+            AlarmManager alarmManager = new AlarmManager(getApplicationContext());
+            AlarmModel alarmModel = alarmManager.getAlarmById(_id);
+            if(alarmModel != null)
+            {
+                String[] temp = alarmModel.getTime().split("\\|");
+                picker.setCurrentHour(Integer.parseInt(temp[0]));
+                picker.setCurrentMinute(Integer.parseInt(temp[1]));
+                isUpdateMode = true;
+            }
+        }
+
+
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
@@ -36,6 +60,8 @@ public class AddAlarmActivity extends AppCompatActivity {
             actionBar.setElevation(0);
             actionBar.setTitle("");
         }
+
+
     }
 
     @Override
@@ -47,19 +73,18 @@ public class AddAlarmActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId())
-        {
-            case R.id.btnConfirm :
+        if(item.getItemId() == R.id.btnConfirm){
                 //Save alarm from here.
-                AlarmManager alarmManager = AlarmManager.getInstance(getApplicationContext());
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-                    alarmManager.addAlarm(picker.getHour(),picker.getMinute(),getDaysOfWeek());
-                else
-                    alarmManager.addAlarm(picker.getCurrentHour(),picker.getCurrentMinute(),getDaysOfWeek());
-                break;
+            AlarmManager alarmManager = AlarmManager.getInstance(getApplicationContext());
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+                alarmManager.addAlarm(picker.getHour(),picker.getMinute(),getDaysOfWeek());
+            else
+                alarmManager.addAlarm(picker.getCurrentHour(),picker.getCurrentMinute(),getDaysOfWeek());
+            setResult(Activity.RESULT_OK);
+            Toast.makeText(getApplicationContext(),"Alarm set",Toast.LENGTH_SHORT).show();
+            finish();
         }
-        Toast.makeText(getApplicationContext(),"Alarm set",Toast.LENGTH_SHORT).show();
-        finish();
         return super.onOptionsItemSelected(item);
     }
 

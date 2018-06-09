@@ -4,10 +4,13 @@
 
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.REORDER_TASKS" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.SET_ALARM"/>
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+
     <!-- THIS IS DANGEROUS PERMISSION, MUST REQUEST USER GRANT -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.VIBRATE" />
-<uses-permission android:name="android.permission.SET_ALARM"/>
+
     <application
         android:allowBackup="true"
         android:fullBackupContent="@xml/backup_descriptor"
@@ -17,18 +20,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".Activities.MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        <activity android:name=".Activities.MainActivity"/>
 
         <activity android:name=".Activities.AddAlarmActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Activities.MainActivity" />
+                <meta-data
+                    android:name="android.support.PARENT_ACTIVITY"
+                    android:value=".Activities.MainActivity"
+                />
         </activity>
 
         <receiver
@@ -43,18 +41,20 @@
         <activity
             android:name=".Activities.RingAlarmActivity"
             android:theme="@style/FullScreenTheme"
-            android:launchMode="singleTask"
-            />
+            android:launchMode="singleTask" />
 
         <receiver
             android:name=".Receivers.AlarmReceiver"
             android:enabled="true"
             android:exported="true"
-            android:process=":remote">
+            android:process=":remote" />
 
-        </receiver>
+        <activity android:name=".Activities.WelcomeActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
-        <activity android:name=".Activities.WelcomeActivity"></activity>
     </application>
-
 </manifest>

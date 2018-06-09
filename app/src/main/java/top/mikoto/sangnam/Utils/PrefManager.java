@@ -32,12 +32,5 @@ public class PrefManager {
         return pref.getBoolean(IS_FIRST_TIME_LAUNCH, true);
     }
 
-    public void setLatestId(int latestId){
-        editor.putInt(LATEST_ID,latestId);
-        editor.commit();
-    }
 
-    public int getLatestID() {
-        return pref.getInt(LATEST_ID,-1);
-    }
 }

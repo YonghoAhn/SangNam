@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.support.v4.content.ContextCompat;
+import android.text.Html;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -55,6 +56,12 @@ public class AlarmManager {
 
     }
 
+    public AlarmModel getAlarmById(int _id)
+    {
+        DBHelper dbHelper = new DBHelper(context,"ALARM",null,1);
+        return dbHelper.getAlarmById(_id);
+    }
+
     /**
      * @param hour HOUR_OF_DAY, 24h format
      * @param minute MINUTE
@@ -81,7 +88,25 @@ public class AlarmManager {
 
     public void removeAlarm(int _id)
     {
+        android.app.AlarmManager alarmManager = (android.app.AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+        DBHelper dbHelper = new DBHelper(context,"ALARM",null,1);
+        dbHelper.removeAlarm(_id);
 
+        Intent mAlarmIntent = new Intent(context, AlarmReceiver.class);
+        mAlarmIntent.setData(Uri.parse("mikoto://" + _id));
+        mAlarmIntent.putExtra("id", _id);
+        mAlarmIntent.setAction("top.mikoto.sangnam.ALARM");
+        for(int i = 0; i< 6; i++) {
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                    context,
+                    _id+i,
+                    mAlarmIntent,
+                    PendingIntent.FLAG_UPDATE_CURRENT
+            );
+            if (alarmManager != null) {
+                alarmManager.cancel(pendingIntent);
+            }
+        }
     }
 
     public void addAlarm(int hour, int minute, String days_of_week)
@@ -108,11 +133,8 @@ public class AlarmManager {
 
         Intent mAlarmIntent = new Intent(context, AlarmReceiver.class);
         mAlarmIntent.setData(Uri.parse("mikoto://"+_id));
+        mAlarmIntent.putExtra("id",_id);
         mAlarmIntent.setAction("top.mikoto.sangnam.ALARM");
-        //mAlarmIntent.putExtra("_id", _id);
-
-
-         //1 = sunday
 
         for(int i = 0; i< 7; i++) //0 : sunday
         {
@@ -127,10 +149,6 @@ public class AlarmManager {
                 addAlarm(hour,minute,i+1, pendingIntent);
             }
         }
-
-        PrefManager prefManager = new PrefManager(context);
-
-        prefManager.setLatestId(_id+7);
 
         dbHelper.close();
     }
@@ -148,6 +166,21 @@ public class AlarmManager {
 
         result += " : " + temp[1];
 
+        return result;
+    }
+
+
+    public static String parseDays(String days)
+    {
+        char[] temp = days.toCharArray();
+        String result = "";
+        result += temp[0] == '1' ? "<font color='#ef0000'>일 </font>" : "";
+        result += temp[1] == '1' ? "월 " : "";
+        result += temp[2] == '1' ? "화 " : "";
+        result += temp[3] == '1' ? "수 " : "";
+        result += temp[4] == '1' ? "목 " : "";
+        result += temp[5] == '1' ? "금 " : "";
+        result += temp[6] == '1' ? "<font color='#006bef'>토 </font>" : "";
         return result;
     }
 
