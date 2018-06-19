@@ -13,11 +13,9 @@ import top.mikoto.sangnam.Models.AlarmModel;
 
 public class DBHelper extends SQLiteOpenHelper {
 
-    private final Context context;
-
     public DBHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
-        this.context = context;
+        Context context1 = context;
     }
 
     @Override
@@ -52,7 +50,6 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public ArrayList<AlarmModel> getAllAlarms()
     {
-
         SQLiteDatabase db = getReadableDatabase();
 
         Cursor cursor = db.rawQuery(" SELECT _ID, TIME, DAYS, RUN FROM ALARM ",null);
@@ -87,16 +84,15 @@ public class DBHelper extends SQLiteOpenHelper {
         return alarm;
     }
 
-    public void updateAlarm(AlarmModel alarm, int _id)
+    public void updateAlarm(AlarmModel alarm)
     {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues cv = new ContentValues();
-
         cv.put("TIME", alarm.getTime());
         cv.put("DAYS", alarm.getDays());
         cv.put("RUN",alarm.getRun());
 
-        db.update("ALARM",cv,"_ID="+_id,null);
+        db.update("ALARM", cv ,"_ID=?",new String[] {String.valueOf(alarm.get_id())});
         db.close();
     }
 

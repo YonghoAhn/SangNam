@@ -2,13 +2,11 @@ package top.mikoto.sangnam.Activities;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,13 +23,12 @@ import top.mikoto.sangnam.Models.AlarmModel;
 import top.mikoto.sangnam.R;
 import top.mikoto.sangnam.Utils.AlarmManager;
 import top.mikoto.sangnam.Utils.DB.DBHelper;
-import top.mikoto.sangnam.Utils.MP3MusicPlayer;
 
 public class MainActivity extends AppCompatActivity {
-    ArrayList<AlarmModel> alarmModels;
-    ListView listView;
-    AlarmListViewAdapter adapter;
-    DBHelper dbHelper;
+    private ArrayList<AlarmModel> alarmModels = new ArrayList<>();
+    private ListView listView;
+    private AlarmListViewAdapter adapter;
+    private DBHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,11 +50,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        SwipeRefreshLayout swipeRefreshLayout = findViewById(R.id.swipe);
-        swipeRefreshLayout.setOnRefreshListener(() -> {
-            refresh();
-        });
-
         //FAB
         FloatingActionButton btnAdd = findViewById(R.id.btnAdd);
         btnAdd.setOnClickListener(v -> startActivityForResult(new Intent(getApplicationContext(),AddAlarmActivity.class),200));
@@ -66,17 +58,21 @@ public class MainActivity extends AppCompatActivity {
 
         listView = findViewById(R.id.listview);
         alarmModels = dbHelper.getAllAlarms();
-        adapter = new AlarmListViewAdapter(alarmModels,getApplicationContext());
+        adapter = new AlarmListViewAdapter(this,R.layout.alarm_item,alarmModels);
         listView.setAdapter(adapter);
-
         registerForContextMenu(listView);
-
         dbHelper.close();
     }
 
-    public void refresh()
+    private void refresh()
     {
-        alarmModels = dbHelper.getAllAlarms();
+        Log.d("MisakaMOE", "refresh");
+        alarmModels.clear();
+        adapter.notifyDataSetChanged();
+        alarmModels.addAll(dbHelper.getAllAlarms());
+        for (AlarmModel item : alarmModels) {
+            Log.d("MisakaMOE", item.getTime());
+        }
         adapter.notifyDataSetChanged();
     }
 
@@ -93,7 +89,6 @@ public class MainActivity extends AppCompatActivity {
     {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
         int index = info.position;
-        Log.d("MisakaMOE",String.valueOf(index));
         AlarmManager alarmManager = new AlarmManager(getApplicationContext());
         alarmManager.removeAlarm(alarmModels.get(index).get_id());
         refresh();
@@ -103,10 +98,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == 200 && resultCode == Activity.RESULT_OK)
-        {
-           refresh();
-        }
+        refresh();
         super.onActivityResult(requestCode, resultCode, data);
     }
 }

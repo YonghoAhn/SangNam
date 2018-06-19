@@ -1,5 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="EntryPointsManager">
+    <entry_points version="2.0">
+      <entry_point TYPE="field" FQNAME="top.mikoto.sangnam.Utils.PrefManager LATEST_ID" />
+    </entry_points>
+    <pattern value="top.mikoto.sangnam.Activities.AddAlarmActivity" />
+    <pattern value="top.mikoto.sangnam.Adapters.AlarmListViewAdapter" method="addItem" />
+    <pattern value="top.mikoto.sangnam.Adapters.AlarmListViewAdapter" method="AlarmListViewAdapter" />
+    <pattern value="top.mikoto.sangnam.Adapters.AlarmListViewAdapter" />
+    <pattern value="top.mikoto.sangnam.Receivers.AlarmReceiver" />
+    <pattern value="top.mikoto.sangnam.Receivers.BootReceiver" />
+    <pattern value="top.mikoto.sangnam.Utils.DB.DBHelper" />
+    <pattern value="top.mikoto.sangnam.ExampleInstrumentedTest" method="useAppContext" />
+    <pattern value="top.mikoto.sangnam.ExampleInstrumentedTest" />
+    <pattern value="top.mikoto.sangnam.ExampleUnitTest" method="addition_isCorrect" />
+    <pattern value="top.mikoto.sangnam.ExampleUnitTest" />
+    <pattern value="top.mikoto.sangnam.Utils.ImageManager" method="fastblur" />
+    <pattern value="top.mikoto.sangnam.Utils.ImageManager" />
+    <pattern value="top.mikoto.sangnam.Activities.MainActivity" />
+    <pattern value="top.mikoto.sangnam.Utils.PrefManager" />
+    <pattern value="top.mikoto.sangnam.Activities.RingAlarmActivity" />
+    <pattern value="top.mikoto.sangnam.Models.SongModel" method="getDuration" />
+    <pattern value="top.mikoto.sangnam.Models.SongModel" method="getDisplayName" />
+    <pattern value="top.mikoto.sangnam.Models.SongModel" method="getArtist" />
+    <pattern value="top.mikoto.sangnam.Models.SongModel" />
+    <pattern value="top.mikoto.sangnam.Utils.Vibrator" method="vibrate" />
+    <pattern value="top.mikoto.sangnam.Utils.Vibrator" method="getInstance" />
+    <pattern value="top.mikoto.sangnam.Utils.Vibrator" method="Vibrator" />
+    <pattern value="top.mikoto.sangnam.Utils.Vibrator" />
+    <pattern value="top.mikoto.sangnam.Activities.WelcomeActivity" />
+  </component>
   <component name="NullableNotNullManager">
     <option name="myDefaultNullable" value="android.support.annotation.Nullable" />
     <option name="myDefaultNotNull" value="android.support.annotation.NonNull" />

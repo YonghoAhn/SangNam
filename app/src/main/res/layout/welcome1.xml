@@ -14,11 +14,13 @@
         <ImageView
             android:layout_width="@dimen/img_width_height"
             android:layout_height="@dimen/img_width_height"
+            android:src="@drawable/baseline_alarm_add_white_24"
             />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:text="@string/slide_1_title"
             android:textColor="@android:color/white"
             android:textSize="@dimen/slide_title"

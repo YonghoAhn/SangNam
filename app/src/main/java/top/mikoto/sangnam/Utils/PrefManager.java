@@ -4,12 +4,12 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 public class PrefManager {
-    SharedPreferences pref;
-    SharedPreferences.Editor editor;
-    Context _context;
+    private final SharedPreferences pref;
+    private final SharedPreferences.Editor editor;
+    private final Context _context;
 
     // shared pref mode
-    int PRIVATE_MODE = 0;
+    private final int PRIVATE_MODE = 0;
 
     // Shared preferences file name
     private static final String PREF_NAME = "sangnam";

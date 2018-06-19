@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
+import android.support.annotation.NonNull;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
@@ -19,15 +20,15 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.Objects;
+
 import top.mikoto.sangnam.R;
 import top.mikoto.sangnam.Utils.PrefManager;
 
 public class WelcomeActivity extends AppCompatActivity {
 
     private ViewPager viewPager;
-    private MyViewPagerAdapter myViewPagerAdapter;
     private LinearLayout dotsLayout;
-    private TextView[] dots;
     private int[] layouts;
     private Button btnSkip, btnNext;
     private PrefManager prefManager;
@@ -73,7 +74,7 @@ public class WelcomeActivity extends AppCompatActivity {
         // making notification bar transparent
         changeStatusBarColor();
 
-        myViewPagerAdapter = new MyViewPagerAdapter();
+        MyViewPagerAdapter myViewPagerAdapter = new MyViewPagerAdapter();
         viewPager.setAdapter(myViewPagerAdapter);
         viewPager.addOnPageChangeListener(viewPagerPageChangeListener);
 
@@ -94,7 +95,7 @@ public class WelcomeActivity extends AppCompatActivity {
     }
 
     private void addBottomDots(int currentPage) {
-        dots = new TextView[layouts.length];
+        TextView[] dots = new TextView[layouts.length];
 
         int[] colorsActive = getResources().getIntArray(R.array.array_dot_active);
         int[] colorsInactive = getResources().getIntArray(R.array.array_dot_inactive);
@@ -122,7 +123,7 @@ public class WelcomeActivity extends AppCompatActivity {
         finish();
     }
 
-    ViewPager.OnPageChangeListener viewPagerPageChangeListener = new ViewPager.OnPageChangeListener() {
+    private final ViewPager.OnPageChangeListener viewPagerPageChangeListener = new ViewPager.OnPageChangeListener() {
 
         @Override
         public void onPageSelected(int position) {
@@ -165,17 +166,18 @@ public class WelcomeActivity extends AppCompatActivity {
     /**
      * View pager adapter
      */
-    public class MyViewPagerAdapter extends PagerAdapter {
+    class MyViewPagerAdapter extends PagerAdapter {
         private LayoutInflater layoutInflater;
 
-        public MyViewPagerAdapter() {
+        MyViewPagerAdapter() {
         }
 
+        @NonNull
         @Override
-        public Object instantiateItem(ViewGroup container, int position) {
+        public Object instantiateItem(@NonNull ViewGroup container, int position) {
             layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-            View view = layoutInflater.inflate(layouts[position], container, false);
+            View view = Objects.requireNonNull(layoutInflater).inflate(layouts[position], container, false);
             container.addView(view);
 
             return view;
@@ -187,13 +189,13 @@ public class WelcomeActivity extends AppCompatActivity {
         }
 
         @Override
-        public boolean isViewFromObject(View view, Object obj) {
+        public boolean isViewFromObject(@NonNull View view, @NonNull Object obj) {
             return view == obj;
         }
 
 
         @Override
-        public void destroyItem(ViewGroup container, int position, Object object) {
+        public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
             View view = (View) object;
             container.removeView(view);
         }

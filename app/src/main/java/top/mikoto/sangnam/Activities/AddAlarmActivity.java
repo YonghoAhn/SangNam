@@ -12,9 +12,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TimePicker;
 import android.widget.Toast;
-import android.widget.ToggleButton;
-
-import java.util.Calendar;
 
 import top.mikoto.sangnam.Models.AlarmModel;
 import top.mikoto.sangnam.R;
@@ -23,10 +20,10 @@ import top.mikoto.sangnam.databinding.ActivityAddAlarmBinding;
 
 public class AddAlarmActivity extends AppCompatActivity {
 
-    TimePicker picker;
-    ActivityAddAlarmBinding binding;
-    boolean isUpdateMode = false;
-
+    private TimePicker picker;
+    private ActivityAddAlarmBinding binding;
+    private boolean isUpdateMode = false;
+    private int _id = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +31,7 @@ public class AddAlarmActivity extends AppCompatActivity {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_add_alarm);
 
         Intent intent = getIntent();
-        int _id = intent.getIntExtra("_id",-1);
+        _id = intent.getIntExtra("_id",-1);
         picker = findViewById(R.id.timePicker);
         picker.setIs24HourView(true);
 
@@ -58,7 +55,7 @@ public class AddAlarmActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setHomeButtonEnabled(true);
             actionBar.setElevation(0);
-            actionBar.setTitle("");
+            actionBar.setTitle("알람 설정");
         }
 
 
@@ -76,11 +73,18 @@ public class AddAlarmActivity extends AppCompatActivity {
         if(item.getItemId() == R.id.btnConfirm){
                 //Save alarm from here.
             AlarmManager alarmManager = AlarmManager.getInstance(getApplicationContext());
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-                alarmManager.addAlarm(picker.getHour(),picker.getMinute(),getDaysOfWeek());
-            else
-                alarmManager.addAlarm(picker.getCurrentHour(),picker.getCurrentMinute(),getDaysOfWeek());
+            if(isUpdateMode){
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+                    alarmManager.updateAlarm(_id, picker.getHour(), picker.getMinute(), getDaysOfWeek());
+                else
+                    alarmManager.updateAlarm(_id, picker.getCurrentHour(), picker.getCurrentMinute(), getDaysOfWeek());
+            }
+            else {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+                    alarmManager.addAlarm(picker.getHour(), picker.getMinute(), getDaysOfWeek());
+                else
+                    alarmManager.addAlarm(picker.getCurrentHour(), picker.getCurrentMinute(), getDaysOfWeek());
+            }
             setResult(Activity.RESULT_OK);
             Toast.makeText(getApplicationContext(),"Alarm set",Toast.LENGTH_SHORT).show();
             finish();

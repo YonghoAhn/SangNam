@@ -47,7 +47,8 @@
             android:name=".Receivers.AlarmReceiver"
             android:enabled="true"
             android:exported="true"
-            android:process=":remote" />
+            android:process=":remote"
+            />
 
         <activity android:name=".Activities.WelcomeActivity">
             <intent-filter>

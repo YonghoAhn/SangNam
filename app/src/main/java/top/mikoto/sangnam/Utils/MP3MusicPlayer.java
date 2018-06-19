@@ -8,7 +8,6 @@ import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.Log;
-import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,14 +32,16 @@ public class MP3MusicPlayer {
     public Bitmap getAlbumArt(String path)
     {
         android.media.MediaMetadataRetriever mmr = new MediaMetadataRetriever();
+        if(path.equals(""))
+        {
+            return BitmapFactory.decodeResource(context.getResources(),R.drawable.album);
+        }
         mmr.setDataSource(path);
-
         byte [] data = mmr.getEmbeddedPicture();
         // convert the byte array to a bitmap
         if(data != null)
         {
-            Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
-            return bitmap;
+            return BitmapFactory.decodeByteArray(data, 0, data.length);
         }
         else
         {
@@ -48,7 +49,7 @@ public class MP3MusicPlayer {
         }
     }
 
-    public List<String> scanDeviceForMp3Files(){
+    public List<SongModel> scanDeviceForMp3Files(){
         String selection = MediaStore.Audio.Media.IS_MUSIC + " != 0";
         String[] projection = {
                 MediaStore.Audio.Media.TITLE,
@@ -58,7 +59,7 @@ public class MP3MusicPlayer {
                 MediaStore.Audio.Media.DURATION
         };
         final String sortOrder = MediaStore.Audio.AudioColumns.TITLE + " COLLATE LOCALIZED ASC";
-        List<String> mp3Files = new ArrayList<>();
+        List<SongModel> mp3Files = new ArrayList<>();
 
         Cursor cursor = null;
         try {
@@ -76,16 +77,13 @@ public class MP3MusicPlayer {
                     song.setDuration(cursor.getString(4));
                     cursor.moveToNext();
                     if(song.getPath()!=null && song.getPath().endsWith(".mp3")) {
-                        mp3Files.add(song.getPath());
+                        mp3Files.add(song);
                     }
                 }
 
             }
 
             // print to see list of mp3 files
-            for( String file : mp3Files) {
-                Log.i("MisakaMOE", file);
-            }
 
         } catch (Exception e) {
             Log.e("MisakaMOE", e.toString());
