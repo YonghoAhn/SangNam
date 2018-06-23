@@ -15,7 +15,7 @@
         <ImageView
             android:layout_width="@dimen/img_width_height"
             android:layout_height="@dimen/img_width_height"
-            android:src="@drawable/baseline_queue_music_white_24"
+            android:src="@drawable/baseline_queue_music_white_48"
              />
 
         <TextView

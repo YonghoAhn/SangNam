@@ -17,7 +17,10 @@ public class AlarmReceiver extends BroadcastReceiver {
         //Receive Alarm.
         if((intent!=null) && (Objects.requireNonNull(intent.getAction()).equals("top.mikoto.sangnam.ALARM"))) {
             Log.d("MisakaMOE", "Alarm!");
-            context.startActivity(new Intent(context, RingAlarmActivity.class).addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
+            Intent intent1 = new Intent(context, RingAlarmActivity.class);
+            intent1.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+            intent1.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intent1);
         }
     }
 }
