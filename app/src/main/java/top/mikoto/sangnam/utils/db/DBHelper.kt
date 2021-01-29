@@ -5,7 +5,7 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteDatabase.CursorFactory
 import android.database.sqlite.SQLiteOpenHelper
-import top.mikoto.sangnam.models.AlarmModel
+import top.mikoto.sangnam.domain.models.dto.AlarmModel
 import java.util.*
 
 class DBHelper(context: Context, name: String?, factory: CursorFactory?, version: Int) : SQLiteOpenHelper(context, name, factory, version) {

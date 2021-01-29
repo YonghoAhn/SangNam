@@ -3,7 +3,7 @@ package top.mikoto.sangnam.receivers
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import top.mikoto.sangnam.models.AlarmModel
+import top.mikoto.sangnam.domain.models.dto.AlarmModel
 import top.mikoto.sangnam.utils.AlarmManager
 import top.mikoto.sangnam.utils.db.DBHelper
 import java.util.*

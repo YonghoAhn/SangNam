@@ -1,4 +1,4 @@
-package top.mikoto.sangnam.adapters
+package top.mikoto.sangnam.utils.adapters
 
 import android.content.Context
 import android.content.Intent
@@ -11,9 +11,9 @@ import android.widget.CompoundButton
 import android.widget.Switch
 import android.widget.TextView
 import top.mikoto.sangnam.R
-import top.mikoto.sangnam.activities.AddAlarmActivity
-import top.mikoto.sangnam.activities.MainActivity
-import top.mikoto.sangnam.models.AlarmModel
+import top.mikoto.sangnam.presentation.view.AddAlarmActivity
+import top.mikoto.sangnam.presentation.view.MainActivity
+import top.mikoto.sangnam.domain.models.dto.AlarmModel
 import top.mikoto.sangnam.utils.AlarmManager
 import java.util.*
 

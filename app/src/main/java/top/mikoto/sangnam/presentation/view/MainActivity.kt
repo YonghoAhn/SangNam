@@ -1,4 +1,4 @@
-package top.mikoto.sangnam.activities
+package top.mikoto.sangnam.presentation.view
 
 import android.Manifest
 import android.content.Intent
@@ -16,8 +16,8 @@ import android.view.View
 import android.widget.AdapterView.AdapterContextMenuInfo
 import android.widget.ListView
 import top.mikoto.sangnam.R
-import top.mikoto.sangnam.adapters.AlarmListViewAdapter
-import top.mikoto.sangnam.models.AlarmModel
+import top.mikoto.sangnam.utils.adapters.AlarmListViewAdapter
+import top.mikoto.sangnam.domain.models.dto.AlarmModel
 import top.mikoto.sangnam.utils.AlarmManager
 import top.mikoto.sangnam.utils.db.DBHelper
 import java.util.*

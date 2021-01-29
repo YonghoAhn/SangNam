@@ -1,4 +1,4 @@
-package top.mikoto.sangnam.activities
+package top.mikoto.sangnam.presentation.view
 
 import androidx.databinding.DataBindingUtil
 import android.os.Build

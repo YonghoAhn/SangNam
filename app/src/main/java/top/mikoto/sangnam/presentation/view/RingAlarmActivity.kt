@@ -1,4 +1,4 @@
-package top.mikoto.sangnam.activities
+package top.mikoto.sangnam.presentation.view
 
 import android.graphics.PorterDuff
 import android.graphics.drawable.BitmapDrawable
@@ -37,7 +37,7 @@ class RingAlarmActivity : AppCompatActivity() {
         val textView = findViewById<TextView>(R.id.txtTitle)
         val squares = findViewById<AndroidSquares>(R.id.albumCover)
         var filename = ""
-        if (list.size > 0) {
+        if (list.isNotEmpty()) {
             val index = Random().nextInt(list.size)
             var file = "file://"
             val song = list[index]

@@ -8,8 +8,7 @@ import android.graphics.BitmapFactory
 import top.mikoto.sangnam.R
 import android.provider.MediaStore
 import android.util.Log
-import top.mikoto.sangnam.models.SongModel
-import top.mikoto.sangnam.utils.MP3MusicPlayer
+import top.mikoto.sangnam.domain.models.dto.SongModel
 import java.lang.Exception
 import java.util.ArrayList
 

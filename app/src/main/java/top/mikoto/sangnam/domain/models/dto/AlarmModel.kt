@@ -1,4 +1,4 @@
-package top.mikoto.sangnam.models
+package top.mikoto.sangnam.domain.models.dto
 
 data class AlarmModel(
         var id: Int,

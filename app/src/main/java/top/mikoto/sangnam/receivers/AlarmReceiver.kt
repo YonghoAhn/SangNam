@@ -4,7 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.util.Log
-import top.mikoto.sangnam.activities.RingAlarmActivity
+import top.mikoto.sangnam.presentation.view.RingAlarmActivity
 import java.util.*
 
 class AlarmReceiver : BroadcastReceiver() {

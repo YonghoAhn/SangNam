@@ -1,4 +1,4 @@
-package top.mikoto.sangnam
+package top.mikoto.sangnam.presentation.viewmodels
 
 import androidx.lifecycle.ViewModel
 
